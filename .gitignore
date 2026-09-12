@@ -1,0 +1,4 @@
+v2_deployment_guide.txt
+factory_billing_db/
+.env
+*.log
