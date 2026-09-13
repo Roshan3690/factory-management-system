@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="offline-icons.css">
+
 <nav style="background: white; padding: 1rem 2rem; border-bottom: 2px solid #e2e8f0; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
     <div style="font-weight: 700; font-size: 1.8rem; color: #3b82f6;"><i class="fa-solid fa-industry"></i> FactoryTrack</div>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
