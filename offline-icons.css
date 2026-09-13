@@ -1,0 +1,33 @@
+/* Offline icon fallback for FactoryTrack.
+   This file intentionally uses Unicode symbols instead of an online icon font,
+   so the application works on computers with no Internet connection. */
+.fa-solid, .fa-regular, .fa-brands { display: inline-block; width: 1.15em; text-align: center; font-style: normal; font-family: Arial, "Segoe UI Symbol", sans-serif; }
+.fa-solid::before, .fa-regular::before, .fa-brands::before { display: inline-block; }
+
+.fa-industry::before { content: "⚙"; }
+.fa-home::before { content: "⌂"; }
+.fa-users::before { content: "♟"; }
+.fa-briefcase::before { content: "▣"; }
+.fa-clock::before { content: "◷"; }
+.fa-check-circle::before { content: "✓"; }
+.fa-plus-circle::before { content: "+"; }
+.fa-user::before { content: "●"; }
+.fa-layer-group::before { content: "▤"; }
+.fa-align-left::before { content: "☰"; }
+.fa-calendar::before { content: "▣"; }
+.fa-calendar-day::before { content: "□"; }
+.fa-indian-rupee-sign::before { content: "₹"; }
+.fa-check::before { content: "✓"; }
+.fa-list::before { content: "☷"; }
+.fa-arrows-up-down::before { content: "↕"; }
+.fa-building::before { content: "▥"; }
+.fa-pen-to-square::before { content: "✎"; }
+.fa-save::before { content: "▣"; }
+.fa-times::before { content: "×"; }
+.fa-edit::before { content: "✎"; }
+.fa-folder-open::before { content: "▰"; }
+.fa-check-double::before { content: "✓✓"; }
+.fa-print::before { content: "▣"; }
+
+/* Keep any future Font Awesome class visible rather than disappearing offline. */
+[class*="fa-"]::before { min-width: 1em; }
