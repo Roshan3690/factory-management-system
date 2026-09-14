@@ -99,6 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$job_name]);
         $works = $stmt->fetchAll();
         echo json_encode($works);
+    } elseif ($action === 'get_company_works') {
+        $customer_name = $_GET['customer'] ?? '';
+        $stmt = $pdo->prepare("SELECT * FROM works WHERE customer_name = ? AND payment_status = 'Pending' ORDER BY work_date DESC");
+        $stmt->execute([$customer_name]);
+        $works = $stmt->fetchAll();
+        echo json_encode($works);
     } elseif ($action === 'get_suggestions') {
         $stmtCust = $pdo->query("SELECT DISTINCT customer_name FROM works WHERE customer_name IS NOT NULL AND customer_name != '' ORDER BY customer_name");
         $customers = $stmtCust->fetchAll(PDO::FETCH_COLUMN);

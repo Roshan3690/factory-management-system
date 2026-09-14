@@ -35,11 +35,16 @@ function amountInWords(float $number) {
 }
 
 $job_filter = $_GET['job_name'] ?? null;
+$customer_filter = $_GET['customer'] ?? null;
+$is_consolidated = isset($_GET['consolidated']) && $_GET['consolidated'] == '1';
 
 try {
     if ($job_filter) {
         $where_sql = "WHERE job_name = ?";
         $params[] = $job_filter;
+    } elseif ($customer_filter) {
+        $where_sql = "WHERE customer_name = ? AND payment_status = 'Pending'";
+        $params[] = $customer_filter;
     } else {
         $where_sql = "WHERE payment_status = 'Pending'";
     }
@@ -52,16 +57,16 @@ try {
     $total_all = 0;
     
     foreach($works as $work) {
-        $job = $work['job_name'] ?: 'Uncategorized';
-        if (!isset($grouped_works[$job])) {
-            $grouped_works[$job] = [
+        $group_key = $is_consolidated ? ($work['customer_name'] ?: 'Unknown Customer') : ($work['job_name'] ?: 'Uncategorized');
+        if (!isset($grouped_works[$group_key])) {
+            $grouped_works[$group_key] = [
                 'items' => [],
                 'subtotal' => 0,
                 'customer_name' => $work['customer_name'] ?? ''
             ];
         }
-        $grouped_works[$job]['items'][] = $work;
-        $grouped_works[$job]['subtotal'] += $work['amount'];
+        $grouped_works[$group_key]['items'][] = $work;
+        $grouped_works[$group_key]['subtotal'] += $work['amount'];
         $total_all += $work['amount'];
     }
     
@@ -130,8 +135,31 @@ try {
 <body>
     <div class="no-print">
         <button onclick="window.print()" class="print-btn">Print Invoice</button>
+        <button onclick="toggleEditMode()" class="print-btn" id="editBtn" style="background: #0284c7;">Enable Edit Mode</button>
         <a href="index.php" class="print-btn">Back to Dashboard</a>
     </div>
+
+    <script>
+        let isEditMode = false;
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const containers = document.querySelectorAll('.invoice-container');
+            const btn = document.getElementById('editBtn');
+            
+            containers.forEach(container => {
+                container.contentEditable = isEditMode ? "true" : "false";
+                container.style.outline = isEditMode ? "2px dashed #0284c7" : "none";
+            });
+            
+            if (isEditMode) {
+                btn.textContent = "Disable Edit Mode";
+                btn.style.background = "#dc2626";
+            } else {
+                btn.textContent = "Enable Edit Mode";
+                btn.style.background = "#0284c7";
+            }
+        }
+    </script>
 
     <?php if (count($grouped_works) > 0): ?>
         <?php 
@@ -178,8 +206,13 @@ try {
                 $sgst = $amount * 0.09;
                 $net = $amount + $cgst + $sgst;
                 
+                $desc = $item['description'];
+                if ($is_consolidated && !empty($item['job_name'])) {
+                    $desc .= ' (Job: ' . $item['job_name'] . ')';
+                }
+
                 $rows[] = [
-                    'desc' => $item['description'],
+                    'desc' => $desc,
                     'taxable' => $amount,
                     'cgst' => $cgst,
                     'sgst' => $sgst,

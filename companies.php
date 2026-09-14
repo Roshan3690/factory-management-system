@@ -84,7 +84,8 @@
                     <td style="font-size: 1.2rem; font-weight: bold;">₹${parseFloat(company.total_spent).toFixed(2)}</td>
                     <td>
                         <button onclick="openModal('${company.customer_name}', '${company.address || ''}', '${company.gstin || ''}', '${company.phone || ''}')" class="btn btn-secondary" style="margin-right: 5px;"><i class="fa-solid fa-edit"></i> Edit</button>
-                        <a href="jobs.php?customer=${encodeURIComponent(company.customer_name)}" class="btn btn-primary"><i class="fa-solid fa-folder-open"></i> View Jobs</a>
+                        <a href="jobs.php?customer=${encodeURIComponent(company.customer_name)}" class="btn btn-primary" style="margin-right: 5px;"><i class="fa-solid fa-folder-open"></i> View Jobs</a>
+                        <a href="company_billing.php?customer=${encodeURIComponent(company.customer_name)}" class="btn btn-warning"><i class="fa-solid fa-file-invoice"></i> Generate Bill</a>
                     </td>
                 `;
                 tbody.appendChild(tr);
